@@ -1,18 +1,18 @@
-# >>> rubio-standards >>>
-# Managed by rubio-standards Copier template. Do not edit between sentinels —
-# `scripts/merge-gitignore.sh` rewrites this block on every `copier copy/update`.
 .DS_Store
 .envrc.local
-# .mise.local.toml stays trackable for committed repository tools, tasks and env
-# Use .envrc.local for machine-local values
 *.log
 node_modules/
 dist/
 build/
 coverage/
 reports/
-# Shared Config Directory (ADR-0033), provisioned by `mise bootstrap --only repos,tools`.
-.standards-config/
 
-# Per-stack
-# <<< rubio-standards <<<
+# @rubio-enterprises/standards, installed by `mise run setup`
+.standards/
+
+# Personal overlays
+lefthook-local.yml
+.mise.local.toml
+mise.local.toml
+
+!.claude/settings.json
