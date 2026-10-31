@@ -1,0 +1,64 @@
+# Test Gate (from @rubio-enterprises/standards; this repository owns it). The `test-gate` job is a
+# required status check. It runs each Lifecycle Task this repository defines (typecheck, build,
+# test, e2e) and, for test and e2e, requires JUnit reports under reports/test/ (junit.xml, or one
+# per package) with at least one test case and no failures, so a suite that runs nothing cannot
+# pass. Change runs-on, add services or setup steps as the repository needs; keep the job name.
+# An Opt-out (STANDARDS_TEST_GATE = "off" in mise.toml) passes it with a notice.
+name: test-gate
+
+"on":
+  pull_request:
+  merge_group:
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  test-gate:
+    name: test-gate
+    runs-on: ${{ fromJSON(vars.RUNNERS || '{}').small || fromJSON('["ubuntu-slim"]') }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4
+        with:
+          install: false
+      - name: Install the standards package, the tools and the dependencies
+        run: mise run setup
+        env:
+          NODE_AUTH_TOKEN: ${{ github.token }}
+      - name: Run the Lifecycle Tasks this repository defines
+        run: |
+          if [ "$(mise exec -- printenv STANDARDS_TEST_GATE || true)" = off ]; then
+            echo "::notice::Test Gate Opt-out: STANDARDS_TEST_GATE = off in mise.toml"
+            exit 0
+          fi
+          for task in typecheck build test e2e; do
+            if ! mise tasks info "$task" >/dev/null 2>&1; then echo "no $task task"; continue; fi
+            rm -rf reports/test
+            echo "::group::mise run $task"
+            mise run "$task"
+            echo "::endgroup::"
+            case $task in test | e2e)
+              # reports/test/junit.xml, or one report per package in a monorepo.
+              if [ -z "$(find reports/test -name '*.xml' 2>/dev/null)" ]; then
+                echo "::error::$task wrote no JUnit report under reports/test/"
+                exit 1
+              fi
+              junit() { find reports/test -name '*.xml' -exec cat {} + | { grep -oE "$1" || true; } | wc -l; }
+              cases=$(junit '<testcase[ >]')
+              failed=$(junit '<(failure|error)[ >/]')
+              echo "$task: $cases test cases, $failed failures or errors"
+              if [ "$cases" -eq 0 ] || [ "$failed" -ne 0 ]; then
+                echo "::error::$task: the JUnit proof needs at least one test case and no failures"
+                exit 1
+              fi
+            esac
+          done

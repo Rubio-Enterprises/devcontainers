@@ -24,9 +24,7 @@
         {
           "name": "baseline release for mise update",
           "filePatterns": ["src/baseline/devcontainer-feature.json"],
-          "matchStrings": [
-            "\"version\":\\s*\"(?<version>\\d+\\.\\d+\\.\\d+)\""
-          ],
+          "matchStrings": ["\"version\":\\s*\"(?<version>\\d+\\.\\d+\\.\\d+)\""],
           "bumpType": "patch"
         }
       ]

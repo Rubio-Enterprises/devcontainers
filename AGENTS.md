@@ -1,6 +1,6 @@
 # Agent context
 
-This repo follows Rubio-Enterprises standards. Run `/audit-standards` from a Claude Code session to check conformance, or `/onboard-repo` for greenfield setup.
+This repo follows the Rubio-Enterprises standards from `@rubio-enterprises/standards`: run `mise run setup` once per clone, and `mise run check` before committing (`mise run fmt` applies the Fixers). Feature tests run in `test.yaml`.
 
 Repo-specific context (in-progress migrations, gotchas, agent guidance):
 
@@ -9,8 +9,7 @@ The `Rubio-Enterprises/devcontainers` source repository publishes Features to
 images under `ghcr.io/rubio-enterprises/devcontainers/`. Keep the existing Feature
 and collection package namespace independent of the source repository name.
 See `docs/base-images.md` for image build/publication work. `baseline` is the org
-Dev Container baseline; the standards audit rule REPOSITORY-WORKSPACE-FILE
-requires every native repository to pin it. See `README.md` for what it
+Dev Container baseline. See `README.md` for what it
 provides, how to test it, and how releases work.
 
 - Keep the repository public: clients pull features from GHCR without
