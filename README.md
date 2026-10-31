@@ -40,7 +40,7 @@ and use the repository's tools through mise:
 
 ```sh
 mise trust
-mise bootstrap --only repos,tools --yes
+mise run setup   # standards package, pinned tools, git hooks
 mise tasks
 ```
 
@@ -152,10 +152,10 @@ a linked work item, and What?, Why?, How? and Testing? sections. Use repository
 issues for questions and include the template's feedback and dependency context
 when relevant.
 
-Run `mise trust && mise bootstrap --only repos,tools --yes` to provision the
-Shared Config Checkout, tools and hooks. Run `mise run check` for all pre-commit
-checks, or check Markdown with `mise exec -- markdownlint-cli2 README.md`.
-There is no `mise run lint` or `mise run test` task; use the feature test command
+Run `mise trust && mise run setup` to install `@rubio-enterprises/standards` (export
+`NODE_AUTH_TOKEN`, for example `"$(gh auth token)"`, first), the tools and the hooks. Run
+`mise run check` for every Check, or `mise run fmt` to apply the Fixers. There is no
+`mise run test` task (the Test Gate is opted out in `mise.toml`); use the feature test command
 above with a Docker daemon.
 For changes under `src/<feature>/`, bump that feature's version in the same PR;
 removing an option or environment variable requires a major bump.
