@@ -8,7 +8,7 @@ min_version = "2026.10.19"
 STANDARDS_TEST_GATE = "off"  # image program (D-10): its tests build images with Docker (test.yaml) or verify published images (base-images.yml)
 
 [tools]
-node = "24.21.0"
+node = "24.22.1"
 
 [tasks.setup]
 description = "Install the standards package, its tools and the git hooks, then every setup:* task"
