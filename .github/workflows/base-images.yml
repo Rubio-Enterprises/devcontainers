@@ -107,6 +107,19 @@ jobs:
              | ($layers | length) > ($prefix | length)
                and $layers[0:($prefix | length)] == $prefix' \
             "$out/base-ci/blobs/sha256/${ci_digest#sha256:}"
+      # cache-smoke.sh is shared with the per-build dev checks of repository images; move the ref when it changes
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: Rubio-Enterprises/.github
+          ref: d77a4ce8c3aabe44dafd498dc8af0754c5691445
+          path: .ci-contract
+          sparse-checkout: actions/repository-image/cache-smoke.sh
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+      - name: Check the CI image as a repository image runs it
+        run: >-
+          bash test/base-image-ci-reference.sh "$LOCAL/base-ci:build" "$ARCH"
+          .ci-contract/actions/repository-image/cache-smoke.sh
       - name: Install checksum-pinned Trivy
         run: |
           set -euo pipefail

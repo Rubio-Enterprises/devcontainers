@@ -36,6 +36,31 @@ secrets, reporting identifiers and locations, never matched values. The images
 contain no standards checkout, provisioning pin or credentials. They do not
 fetch standards at runtime.
 
+## CI image release check
+
+A repository image's CI variant is its repository layers rebased onto base-ci, and
+`.github`'s rebase verification proves those layers and the runtime configuration
+identical to the dev image's. So per-build checks of the CI image only retest what
+base-ci adds, and they no longer run per build. Each native `build` job runs
+`test/base-image-ci-reference.sh` instead, once per base pair release:
+
+- It builds a reference repository layer over base-ci
+  (`test/base-image-ci-reference.Dockerfile`). Its `ENV` and cache directories mirror the
+  `environment` stage of the Standards Package image recipe, and the same stage in
+  `Rubio-Enterprises/.github` `tests/fixtures/frozen-repository-image-v2.Dockerfile`; keep them in step.
+- It runs the runner-payload runtime check as UID 1000 with no network, no-new-privileges, 1 GiB
+  and 512 processes: runner, mise, gh and jq run; `UV_LINK_MODE=copy`; the mise, devcontainer cache and
+  runner directories are writable; no sudo; no provisioning pin or token in the environment.
+- It runs the CI image's cache check for UID 1000: `cache-smoke.sh` seeds nested cache and SDK-home
+  metadata as vscode and checks append, create, rename and delete. The script is
+  `.github`'s `actions/repository-image/cache-smoke.sh`, checked out at the ref pinned in the workflow and
+  shared with the per-build dev image checks (UID 1000 and 1001). Move the ref when that file changes.
+- Two fault controls build the same layer with a root-owned runner directory and a root-owned uv
+  cache. Each check must fail on its fault, so a check that can no longer fail fails the job.
+
+The job fails the release before assembly and publication if any check fails. CI / UID 1001 stays
+omitted: Container Pool runners use UID 1000 and dev images test the migration.
+
 ## Digest pairing for rebase
 
 Each native job resolves its base **platform manifest digest** in an ephemeral
