@@ -6,6 +6,7 @@ min_version = "2026.10.19"
 [env]
 # STANDARDS_VERSION = "1.4.2"  # Release Pin: hold this release while the latest breaks the repository; <issue link>
 STANDARDS_TEST_GATE = "off"  # image program (D-10): its tests build images with Docker (test.yaml) or verify published images (base-images.yml)
+STANDARDS_APP_IMAGE = "off"  # base-images.yml publishes the Dev Container base images and release.yaml the devcontainer features: build inputs, not App Images (ADR-0044)
 
 [tools]
 node = "24.22.1"
