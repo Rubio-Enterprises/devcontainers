@@ -20,8 +20,9 @@ recursively reclaims both `MISE_SHIMS_DIR` and an existing `/usr/local/share/mis
 repository lifecycle commands. The latter contains mutable preinstalled tools, including
 Python site-packages written by setup. Writable shims alone do not establish readiness.
 
-Matching ownership needs no sudo or recursive traversal. A missing system mise tree stays
-absent, so the same Feature supports cold local builds. Repair uses non-interactive sudo and
+A matching owner UID needs no sudo or recursive traversal: a root group does not prevent
+owner writes, and must not force escalation on fixed-UID CI runners. A missing system mise
+tree stays absent, so the same Feature supports cold local builds. Repair uses non-interactive sudo and
 fails if escalation is blocked; CI's fixed UID 1000 does not need repair. Recursive ownership
 does not follow tool symlinks outside these trees. Feature tests cover nested writes with
 already-writable shims, a sudo-free repeat and blocked escalation, complementing repository
