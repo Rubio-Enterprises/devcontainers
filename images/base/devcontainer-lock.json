@@ -1,9 +1,9 @@
 {
   "features": {
-    "ghcr.io/rubio-enterprises/devcontainer-features/baseline:3.0.1": {
-      "version": "3.0.1",
-      "resolved": "ghcr.io/rubio-enterprises/devcontainer-features/baseline@sha256:8950384a1c2b94c9487913feb561a422f5af2483ed86fa62079d912c2c10b07c",
-      "integrity": "sha256:8950384a1c2b94c9487913feb561a422f5af2483ed86fa62079d912c2c10b07c"
+    "ghcr.io/rubio-enterprises/devcontainer-features/baseline:3.0.2": {
+      "version": "3.0.2",
+      "resolved": "ghcr.io/rubio-enterprises/devcontainer-features/baseline@sha256:a72a0ed546c025630b169793cc25f49a2a63c139d9dbe6369b5d7190652b86e4",
+      "integrity": "sha256:a72a0ed546c025630b169793cc25f49a2a63c139d9dbe6369b5d7190652b86e4"
     }
   }
 }
