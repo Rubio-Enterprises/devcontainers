@@ -12,6 +12,21 @@ namespace `ghcr.io/rubio-enterprises/devcontainer-features`.
 First publication and anonymous access/package association require a separate
 owner checkpoint; source preparation alone does not establish availability.
 
+## Runtime ownership after UID remapping
+
+The Dev Container CLI re-owns the remote user's home when it changes that user's UID/GID,
+not directories under `/usr/local/share`. The baseline Feature's `onCreateCommand` therefore
+recursively reclaims both `MISE_SHIMS_DIR` and an existing `/usr/local/share/mise` before
+repository lifecycle commands. The latter contains mutable preinstalled tools, including
+Python site-packages written by setup. Writable shims alone do not establish readiness.
+
+Matching ownership needs no sudo or recursive traversal. A missing system mise tree stays
+absent, so the same Feature supports cold local builds. Repair uses non-interactive sudo and
+fails if escalation is blocked; CI's fixed UID 1000 does not need repair. Recursive ownership
+does not follow tool symlinks outside these trees. Feature tests cover nested writes with
+already-writable shims, a sudo-free repeat and blocked escalation, complementing repository
+image checks at UID 1000 and 1001.
+
 ## Build and validation
 
 `images/base/devcontainer.json` uses the existing baseline Feature installer;
