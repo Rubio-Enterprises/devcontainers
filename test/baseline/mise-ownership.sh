@@ -42,8 +42,9 @@ as_vscode sh -ec '
 test "$(stat -c '%u:%g' "$fixture/lib/site-packages")" = "$(id -u vscode):$(id -g vscode)"
 test "$(stat -c '%u:%g' "$scratch/external")" = '0:0'
 
+chown vscode:root "$MISE_SHIMS_DIR" "$system"
 chmod 755 "$scratch" "$scratch/bin"
 printf '#!/bin/sh\nexit 99\n' >"$scratch/bin/sudo"
 chmod 755 "$scratch/bin/sudo"
 as_vscode env PATH="$scratch/bin:/usr/bin:/bin" "$claim"
-printf 'mise ownership: nested writes, symlink isolation and sudo-free repeat passed\n'
+printf 'mise ownership: nested writes, symlink isolation and sudo-free owner-UID match passed\n'

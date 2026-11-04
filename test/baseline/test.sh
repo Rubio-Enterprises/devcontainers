@@ -67,7 +67,7 @@ else
   check "the helper reclaims a shims directory left to an old UID" as_vscode "$claim"
   check "the remote user can write shims again" as_vscode test -w "$MISE_SHIMS_DIR"
 fi
-check "the helper does nothing once ownership matches" as_vscode "$claim"
+check "the helper does nothing once the owner UID matches" as_vscode "$claim"
 check "system mise installs survive a UID remap even with writable shims" \
   bash "$(dirname "${BASH_SOURCE[0]}")/mise-ownership.sh"
 
