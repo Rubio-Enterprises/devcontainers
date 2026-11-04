@@ -1,6 +1,6 @@
 {
   "id": "baseline",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "name": "Rubio-Enterprises baseline",
   "description": "Shared setup for Rubio-Enterprises Dev Containers: signature-verified mise with its shims on PATH, the personal dotfiles profile, and git safe.directory for workspaces.",
   "documentationURL": "https://github.com/Rubio-Enterprises/devcontainer-features/tree/main/src/baseline",

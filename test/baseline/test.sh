@@ -67,8 +67,9 @@ else
   check "the helper reclaims a shims directory left to an old UID" as_vscode "$claim"
   check "the remote user can write shims again" as_vscode test -w "$MISE_SHIMS_DIR"
 fi
-check "the helper does nothing once the directory is writable" \
-  as_vscode PATH=/nonexistent /bin/sh "$claim"
+check "the helper does nothing once ownership matches" as_vscode "$claim"
+check "system mise installs survive a UID remap even with writable shims" \
+  bash "$(dirname "${BASH_SOURCE[0]}")/mise-ownership.sh"
 
 # The generated test container is disposable and runs as root. Block the API
 # before testing real release resolution/downloads, with separate empty caches.

@@ -62,9 +62,8 @@ install_mise
 mkdir -p "$MISE_SHIMS_DIR"
 chown "$_REMOTE_USER" "$MISE_SHIMS_DIR"
 
-# On Linux the Dev Container CLI can remap the remote user's UID after this
-# script runs, and it re-owns only the home directory. onCreateCommand runs
-# this helper as the remote user to take the shims directory back.
+# The CLI remaps only the home directory after installation. onCreateCommand
+# must reclaim the shims and any system mise tree before repository setup.
 install -D -m 0755 "$(dirname "$0")/claim-mise-shims.sh" /usr/local/share/rubio-baseline/claim-mise-shims
 
 # git refuses repositories owned by another user unless safe.directory lists
