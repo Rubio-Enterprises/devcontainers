@@ -2,7 +2,7 @@
   "name": "Rubio-Enterprises base",
   "image": "mcr.microsoft.com/devcontainers/base:2.2.1-trixie@sha256:1f851004adcd3dff3776b4a1da86727cf52280b0fdc9d5b0568c9c7d74274286",
   "features": {
-    "ghcr.io/rubio-enterprises/devcontainer-features/baseline:3.0.2": {}
+    "ghcr.io/rubio-enterprises/devcontainer-features/baseline:3.0.3": {}
   },
   "remoteUser": "vscode"
 }
